@@ -1,0 +1,13 @@
+[package]
+name = "blinky"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+cortex-m = "0.6"
+cortex-m-rt = "0.6"
+panic-halt = "0.2.0"
+
+[dependencies.tm4c129x-hal]
+version = "0.9.0"
+features = ["rt"]
