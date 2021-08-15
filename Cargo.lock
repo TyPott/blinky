@@ -42,7 +42,7 @@ checksum = "46afbd2983a5d5a7bd740ccb198caf5b82f45c40c09c0eed36052d91cb92e719"
 name = "blinky"
 version = "0.1.0"
 dependencies = [
- "cortex-m 0.6.7",
+ "cortex-m 0.7.3",
  "cortex-m-rt",
  "panic-halt",
  "tm4c129x-hal",
