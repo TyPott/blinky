@@ -6,6 +6,7 @@ edition = "2018"
 [dependencies]
 cortex-m = "0.7"
 cortex-m-rt = "0.6"
+embedded-hal = "0.2"
 panic-halt = "0.2.0"
 
 [dependencies.tm4c129x-hal]

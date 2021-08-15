@@ -44,6 +44,7 @@ version = "0.1.0"
 dependencies = [
  "cortex-m 0.7.3",
  "cortex-m-rt",
+ "embedded-hal",
  "panic-halt",
  "tm4c129x-hal",
 ]

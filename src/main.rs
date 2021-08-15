@@ -1,17 +1,20 @@
 #![no_std]
 #![no_main]
-#![allow(deprecated)] // HAL needs updated to implement new digital API
 
 use core::cell::RefCell;
 
 use cortex_m::{interrupt::Mutex, peripheral::NVIC};
+use embedded_hal::{
+    blocking::delay::DelayMs,
+    digital::v2::{OutputPin, StatefulOutputPin},
+};
 use panic_halt as _;
 use tm4c129x_hal::{
     self as hal,
     delay::Delay,
-    gpio::{gpiof::PF4, gpioj::PJ0, Input, InterruptMode, Output, PullUp, PushPull},
+    gpio::{gpiof::PF4, gpioj::PJ0, GpioExt, Input, InterruptMode, Output, PullUp, PushPull},
     interrupt::GPIOJ,
-    prelude::*,
+    sysctl::SysctlExt,
     tm4c129x::interrupt,
 };
 
@@ -24,18 +27,15 @@ static SHARED: Mutex<RefCell<Option<SharedPeripherals>>> = Mutex::new(RefCell::n
 
 #[interrupt]
 fn GPIOJ() {
-    static mut IS_ON: bool = false;
-
     cortex_m::interrupt::free(|cs| {
         let mut shared = SHARED.borrow(cs).borrow_mut();
         let shared = shared.as_mut().unwrap();
-        if *IS_ON {
-            shared.led.set_low();
+        if shared.led.is_set_high().unwrap() {
+            shared.led.set_low().unwrap();
         } else {
-            shared.led.set_high();
+            shared.led.set_high().unwrap();
         }
 
-        *IS_ON = !*IS_ON;
         shared.button.clear_interrupt();
     });
 }
@@ -76,11 +76,11 @@ fn main() -> ! {
     let mut led2 = port_n.pn0.into_push_pull_output();
 
     loop {
-        led1.set_high();
+        led1.set_high().unwrap();
         delay.delay_ms(1000u32);
-        led1.set_low();
-        led2.set_high();
+        led1.set_low().unwrap();
+        led2.set_high().unwrap();
         delay.delay_ms(1000u32);
-        led2.set_low();
+        led2.set_low().unwrap();
     }
 }
